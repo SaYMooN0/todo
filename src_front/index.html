@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo List</title>
+    <script src="https://unpkg.com/htmx.org"></script>
+</head>
+
+<body>
+    <script src="https://unpkg.com/htmx.org"></script>
+    <h1>Basic ToDo app</h1>
+    <form hx-post="/add-todo" hx-target="#todo-list" hx-swap="outerHTML">
+        <input type="text" name="name" placeholder="Task name" required>
+        <input type="text" name="info" placeholder="Task info">
+        <button type="submit">Add task</button>
+    </form>
+    <ul id="todo-list">
+
+
+    </ul>
+</body>
+
+</html>
