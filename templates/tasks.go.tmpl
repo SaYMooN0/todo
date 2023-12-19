@@ -1,0 +1,17 @@
+{{range .}}
+<div>
+    <label class="task-name">{{.Name}}</label>
+    <label class="task-info"> {{.Info}}</label>
+    <label class="default-checkbox-label">
+        {{if .Complete}}
+        Completed
+        {{else}}
+        Not completed
+        {{end}}
+        <input type="checkbox" {{if .Complete}} checked {{end}}>
+        <span class="checkmark"></span>
+    </label>
+</div>
+{{else}}
+<div>No tasks</div>
+{{end}}
