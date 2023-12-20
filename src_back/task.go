@@ -1,11 +1,9 @@
 package src
 
-import (
-	"time"
-)
+import "time"
 
 type Task struct {
-	Id          uint
+	Id          int64
 	Name        string
 	Info        string
 	Complete    bool
@@ -14,7 +12,7 @@ type Task struct {
 	Importance  uint
 }
 
-func NewTask(id uint, name string, info string) Task {
+func NewTask(id int64, name string, info string) Task {
 	return Task{
 		Id:          id,
 		Name:        name,
@@ -24,7 +22,7 @@ func NewTask(id uint, name string, info string) Task {
 	}
 }
 
-func NewTaskWithDeadline(id uint, name string, info string, deadline time.Time) Task {
+func NewTaskWithDeadline(id int64, name string, info string, deadline time.Time) Task {
 	return Task{
 		Id:          id,
 		Name:        name,
