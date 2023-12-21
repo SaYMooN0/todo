@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo List</title>
+    <link rel="stylesheet" href="/src_front/main.css">
+    <link rel="stylesheet" href="/src_front/pages/authorization/authorization.css">
+</head>
+
+<body>
+    <script src="https://unpkg.com/htmx.org"></script>
+
+    <form class="login-form" method="post" action="/login" hx-post="/login" hx-target=".error-line" hx-swap="outerHTML">
+        <p class="input-line">
+            <input type="text" class="input" name="Email" required placeholder="Email" />
+        </p>
+        <p class="input-line">
+            <input class="input" type="password" name="Password" required placeholder="Password" />
+        </p>
+        <p class="error-line"></p>
+
+        <div class="divider"></div>
+        <p class="input-line">
+            <input class="login-button" type="submit" value="Log in" />
+        </p>
+        <a href="/password_recovery">Lost your password?</a>
+        <a href="/registration">Don't have an account?</a>
+    </form>
+</body>
+
+
+</html>

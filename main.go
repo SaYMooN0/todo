@@ -3,22 +3,16 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	src "my-todo-app/src_back"
 	"my-todo-app/src_back/dbutils"
 	handlers "my-todo-app/src_back/http_handlers"
 
 	"net/http"
 	"os"
-	"sync"
 
 	"github.com/joho/godotenv"
 )
 
-var (
-	tasks = make([]src.Task, 0)
-	mutex = &sync.Mutex{}
-	db    *sql.DB
-)
+var db *sql.DB
 
 func main() {
 	var err error
@@ -32,7 +26,10 @@ func main() {
 	http.Handle("/src_front/", http.StripPrefix("/src_front/", http.FileServer(http.Dir("src_front"))))
 	http.HandleFunc("/", handlers.IndexPage)
 	http.HandleFunc("/registration", handlers.RegistrationPage)
+	http.HandleFunc("/authorization", handlers.AuthorizationPage)
+	http.HandleFunc("/password_recovery", handlers.PasswordRecoveryPage)
 	http.HandleFunc("/add-todo", handlers.AddTodo)
+	http.HandleFunc("/login", handlers.Login)
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		fmt.Println("ListenAndServe: ", err)

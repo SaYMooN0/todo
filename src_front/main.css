@@ -3,13 +3,13 @@ body {
 }
 
 :root {
-    --pale-yellow: #F8E9A1;
-    --soft-red: #F76C6C;
-    --light-blue: #A8D0E6;
-    --deep-blue: #374785;
-    --dark-blue: #24305E;
-    --back: #f5f8f8;
-
+    --back: #f5f8f8;;
+    --back-2: #E4E5E8;
+    --front: #3E3B5E;
+    --bright-1: #658cff;
+    --bright-2: #5151FE;
+    --bright-3: #7447fa;
+    --warning: #CD1111;
 }
 
 .no-underline {
