@@ -6,29 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
     <link rel="stylesheet" href="/src_front/main.css">
+    <script src="https://unpkg.com/htmx.org"></script>
 </head>
 
 <body>
-    <script src="https://unpkg.com/htmx.org"></script>
-    <p class="input-line">
-        <label>Email:</label>
-        <input type="text" name="Email" />
-    </p>
-   
-    <p class="input-line">
-        <label>Password:</label>
-        <input type="password" name="Password" />
-    </p>
-    <p class="input-line">
-        <label>Repeat Password:</label>
-        <input type="password" name="RepeatedPassword" />
-    </p>
-    <p class="input-line">
-        <label>Name:</label>
-        <input type="text" name="Name" />
-    </p>
-    <input type="submit" value="Sign up" />
+    <form class="registration-form" method="post" action="/signup" hx-post="/signup" hx-target=".error-line"
+        hx-redirect="/index" hx-swap="outerHTML">
+        <p class="input-line">
+            <label>Email:</label>
+            <input type="text" name="Email" />
+        </p>
 
+        <p class="input-line">
+            <label>Password:</label>
+            <input type="password" name="Password" />
+        </p>
+        <p class="input-line">
+            <label>Repeat Password:</label>
+            <input type="password" name="RepeatedPassword" />
+        </p>
+        <p class="input-line">
+            <label>Name:</label>
+            <input type="text" name="Name" />
+        </p>
+        <p class="error-line"></p>
+        <input type="submit" value="Sign up" />
+    </form>
 </body>
 <a href="/authorization">Already have an account?</a>
 

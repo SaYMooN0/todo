@@ -5,9 +5,8 @@ import (
 )
 
 func IndexPage(writer http.ResponseWriter, request *http.Request) {
-	_, err := CheckForCookies(writer, request)
-	if err != nil {
-		http.Redirect(writer, request, "/registration", http.StatusFound)
+	if !CheckForAuthToken(writer, request) {
+		http.Redirect(writer, request, "/authorization", http.StatusFound)
 		return
 	}
 	http.ServeFile(writer, request, "src_front/index.html")

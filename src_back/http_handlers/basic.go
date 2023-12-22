@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"database/sql"
+	"fmt"
+	"html/template"
 	"my-todo-app/src_back/dbutils"
 	"net/http"
 	"strconv"
@@ -9,26 +11,52 @@ import (
 
 var db *sql.DB
 
-func CheckForCookies(writer http.ResponseWriter, request *http.Request) (*int, error) {
+func CheckForAuthToken(writer http.ResponseWriter, request *http.Request) bool {
 	idCookie, err := request.Cookie("userId")
 	if err != nil {
-		return nil, err
+		return false
 	}
 
 	userId, err := strconv.Atoi(idCookie.Value)
 	if err != nil {
-		return nil, err
+		return false
 	}
 
-	authString, err := dbutils.GetAuthTokenByID(db, userId)
+	authString, err := dbutils.GetAuthTokenByID(userId)
 	if err != nil {
-		return nil, err
+		return false
 	}
 
 	authTokenCookie, err := request.Cookie("authToken")
 	if err != nil || authString != authTokenCookie.Value {
-		return nil, err
+		return false
 	}
 
-	return &userId, nil
+	return true
+}
+func SetAuthToken(writer http.ResponseWriter, id int64, email string, registrationDate string) error {
+
+	authToken := fmt.Sprintf("%s | %s", registrationDate, email)
+	http.SetCookie(writer, &http.Cookie{
+		Name:  "userId",
+		Value: fmt.Sprint(id),
+		Path:  "/",
+	})
+	http.SetCookie(writer, &http.Cookie{
+		Name:  "authToken",
+		Value: authToken,
+		Path:  "/",
+	})
+
+	return nil
+}
+func SendErrorInErrorLine(writer http.ResponseWriter, errorText string) {
+	tasksTemplate, err := template.ParseFiles("templates/error-line.go.tmpl")
+	if err != nil {
+		http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	if err := tasksTemplate.Execute(writer, errorText); err != nil {
+		http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
+	}
 }

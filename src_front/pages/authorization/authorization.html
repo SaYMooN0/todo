@@ -7,11 +7,10 @@
     <title>ToDo List</title>
     <link rel="stylesheet" href="/src_front/main.css">
     <link rel="stylesheet" href="/src_front/pages/authorization/authorization.css">
+    <script src="https://unpkg.com/htmx.org"></script>
 </head>
 
 <body>
-    <script src="https://unpkg.com/htmx.org"></script>
-
     <form class="login-form" method="post" action="/login" hx-post="/login" hx-target=".error-line" hx-swap="outerHTML">
         <p class="input-line">
             <input type="text" class="input" name="Email" required placeholder="Email" />
@@ -20,7 +19,6 @@
             <input class="input" type="password" name="Password" required placeholder="Password" />
         </p>
         <p class="error-line"></p>
-
         <div class="divider"></div>
         <p class="input-line">
             <input class="login-button" type="submit" value="Log in" />
