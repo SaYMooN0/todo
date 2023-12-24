@@ -81,3 +81,28 @@ func AddNewUserToDb(user structs.User) (int64, error) {
 	}
 	return userId, nil
 }
+func UpsertEmailConfirmation(code string, user structs.User) (int64, error) {
+	var existingID int64
+	queryCheck := `SELECT id FROM email_confirmation WHERE email = $1;`
+	err := db.QueryRow(queryCheck, user.Email).Scan(&existingID)
+	if err != nil && err != sql.ErrNoRows {
+		return 0, err
+	}
+
+	if existingID > 0 {
+		queryUpdate := `UPDATE email_confirmation SET name = $1, password = $2, confirmation_code = $3 WHERE id = $4 RETURNING id;`
+		err := db.QueryRow(queryUpdate, user.Name, user.Password, code, existingID).Scan(&existingID)
+		if err != nil {
+			return 0, err
+		}
+		return existingID, nil
+	} else {
+		queryInsert := `INSERT INTO email_confirmation (name, email, password, confirmation_code) VALUES ($1, $2, $3, $4) RETURNING id;`
+		var newID int64
+		err := db.QueryRow(queryInsert, user.Name, user.Email, user.Password, code).Scan(&newID)
+		if err != nil {
+			return 0, err
+		}
+		return newID, nil
+	}
+}

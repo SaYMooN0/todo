@@ -53,16 +53,8 @@
     border-radius: 9px;
     transition: .1s all;
     cursor: pointer;
-
 }
 
 .login-button:hover {
     transform: scale(1.02);
-}
-.error-line {
-    margin: 8px;
-    color: var(--warning);
-    font-size: 18px;
-    font-weight: 600;
-    font-family: 'Open Sans', sans-serif;
 }

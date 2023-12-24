@@ -10,13 +10,7 @@ type User struct {
 	RegistrationDate time.Time
 }
 
-func NewUser(id int64, name string) User {
-	return User{
-		Id:   id,
-		Name: name,
-	}
-}
-func NewUserFullInfo(id int64, name, email, password string, registrationDate time.Time) User {
+func NewUser(id int64, name, email, password string, registrationDate time.Time) User {
 	return User{
 		Id:               id,
 		Name:             name,

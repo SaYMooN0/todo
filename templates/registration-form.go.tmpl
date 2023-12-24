@@ -1,0 +1,18 @@
+<form class="registration-form" method="post" action="/signup" hx-post="/signup" hx-target="this"
+      hx-redirect="/index" hx-swap="outerHTML">
+    <p class="input-line">Email:
+        <input type="text" name="Email" class="input" value="{{.Email}}" />
+    </p>
+    <p class="input-line">Password:
+        <input type="password" name="Password" class="input" value="{{.Password}}" />
+    </p>
+    <p class="input-line">Repeat Password:
+        <input type="password" name="RepeatedPassword" class="input" value="{{.RepeatedPassword}}" />
+    </p>
+    <p class="input-line">Name:
+        <input type="text" name="Name" class="input" value="{{.Name}}" />
+    </p>
+    <p class="error-line">{{.ErrorLine}}</p>
+
+    <input type="submit" value="Sign up" />
+</form>

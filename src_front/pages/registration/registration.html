@@ -10,26 +10,22 @@
 </head>
 
 <body>
-    <form class="registration-form" method="post" action="/signup" hx-post="/signup" hx-target=".error-line"
+    <form class="registration-form" method="post" action="/signup" hx-post="/signup"  hx-target="this"
         hx-redirect="/index" hx-swap="outerHTML">
-        <p class="input-line">
-            <label>Email:</label>
-            <input type="text" name="Email" />
+        <p class="input-line">Email:
+            <input type="text" name="Email" class="input" />
         </p>
-
-        <p class="input-line">
-            <label>Password:</label>
-            <input type="password" name="Password" />
+        <p class="input-line">Password:
+            <input type="password" name="Password" class="input" />
         </p>
-        <p class="input-line">
-            <label>Repeat Password:</label>
-            <input type="password" name="RepeatedPassword" />
+        <p class="input-line">Repeat Password:
+            <input type="password" name="RepeatedPassword" class="input" />
         </p>
-        <p class="input-line">
-            <label>Name:</label>
-            <input type="text" name="Name" />
+        <p class="input-line">Name:
+            <input type="text" name="Name" class="input" />
         </p>
         <p class="error-line"></p>
+
         <input type="submit" value="Sign up" />
     </form>
 </body>

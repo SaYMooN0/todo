@@ -15,7 +15,13 @@ body {
 .no-underline {
     text-decoration: none;
 }
-
+.error-line {
+    margin: 8px;
+    color: var(--warning);
+    font-size: 18px;
+    font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
+}
 .non-selectable {
     user-select: none;
     -webkit-user-select: none;

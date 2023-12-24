@@ -10,8 +10,42 @@ import (
 	"time"
 )
 
-const idEncryptionKey = "JJllnnUU"
+const idEncryptionKey = "JJllnnUUhhQQ"
+const confirmationIdEncryptionKey = "ppOOyyuuNN"
 
+func GetConfirmationIdFromCookie(request *http.Request) (int64, error) {
+	cookie, err := request.Cookie("confirmationId")
+	if err != nil {
+		return 0, err
+	}
+
+	decryptedId, err := src.Decrypt(cookie.Value, confirmationIdEncryptionKey)
+	if err != nil {
+		return 0, err
+	}
+
+	confirmationId, err := strconv.ParseInt(decryptedId, 10, 64)
+	if err != nil {
+		return 0, err
+	}
+
+	return confirmationId, nil
+}
+
+func GenerateConfirmationIdToken(id int64) (string, error) {
+	encryptedId, err := src.Encrypt(fmt.Sprint(id), confirmationIdEncryptionKey)
+	if err != nil {
+		return "", err
+	}
+	return encryptedId, nil
+}
+func SetConfirmationIdCookie(writer http.ResponseWriter, idToken string) {
+	http.SetCookie(writer, &http.Cookie{
+		Name:  "confirmationId",
+		Value: idToken,
+		Path:  "/",
+	})
+}
 func GetUserIdFromCookie(request *http.Request) (int64, error) {
 	idCookie, err := request.Cookie("userId")
 	if err != nil {
@@ -28,6 +62,21 @@ func GetUserIdFromCookie(request *http.Request) (int64, error) {
 	}
 
 	return userId, nil
+}
+
+func GenerateIDToken(id int64) (string, error) {
+	encryptedId, err := src.Encrypt(fmt.Sprint(id), idEncryptionKey)
+	if err != nil {
+		return "", err
+	}
+	return encryptedId, nil
+}
+func SetIDTokenCookie(writer http.ResponseWriter, idToken string) {
+	http.SetCookie(writer, &http.Cookie{
+		Name:  "userId",
+		Value: idToken,
+		Path:  "/",
+	})
 }
 func GenerateAuthTokenFromUser(user structs.User) (string, error) {
 	return GenerateAuthToken(user.RegistrationDate, user.Email, user.Id)
@@ -50,20 +99,7 @@ func SetAuthTokenCookie(writer http.ResponseWriter, authToken string) {
 		Path:  "/",
 	})
 }
-func GenerateIDToken(id int64) (string, error) {
-	encryptedId, err := src.Encrypt(fmt.Sprint(id), idEncryptionKey)
-	if err != nil {
-		return "", err
-	}
-	return encryptedId, nil
-}
-func SetIDTokenCookie(writer http.ResponseWriter, idToken string) {
-	http.SetCookie(writer, &http.Cookie{
-		Name:  "userId",
-		Value: idToken,
-		Path:  "/",
-	})
-}
+
 func CheckForAuthToken(writer http.ResponseWriter, request *http.Request) bool {
 
 	idCookie, err := request.Cookie("userId")

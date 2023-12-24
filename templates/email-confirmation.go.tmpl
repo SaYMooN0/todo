@@ -1,0 +1,6 @@
+<form class="registration-form" method="post" action="/confirmEmail" hx-post="/confirmEmail" hx-target="this"
+    hx-swap="outerHTML">
+    <h1>Code:</h1>
+    <input type="text" name="Code" class="code-input" />
+    <p class="error-line">{{.}}</p>
+</form>
