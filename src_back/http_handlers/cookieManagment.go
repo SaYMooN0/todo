@@ -10,9 +10,13 @@ import (
 	"time"
 )
 
-const idEncryptionKey = "JJllnnUUhhQQ"
-const confirmationIdEncryptionKey = "ppOOyyuuNN"
+var idEncryptionKey string = ""
+var confirmationIdEncryptionKey string = ""
 
+func InitEncryptionKeys(idEncryption, confirmationIdEncryption string) {
+	idEncryptionKey = idEncryption
+	confirmationIdEncryptionKey = confirmationIdEncryption
+}
 func GetConfirmationIdFromCookie(request *http.Request) (int64, error) {
 	cookie, err := request.Cookie("confirmationId")
 	if err != nil {

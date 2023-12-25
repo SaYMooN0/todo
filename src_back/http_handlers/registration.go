@@ -83,7 +83,14 @@ func ConfirmEmail(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 	receivedCode := request.FormValue("Code")
-	fmt.Println(code, receivedCode)
+	if receivedCode == "" {
+		SendErrorInErrorLine(writer, "No confirmation code recieved")
+		return
+	}
+	if string(code) != receivedCode {
+		SendErrorInErrorLine(writer, "Wrong code")
+		return
+	}
 
 	// registrationDate := time.Now()
 	// userId, err := dbutils.AddNewUserToDb(user)

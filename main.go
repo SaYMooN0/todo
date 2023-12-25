@@ -13,7 +13,12 @@ import (
 )
 
 func main() {
-	err := initDBFromDotEnv()
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("error loading .env file: ", err)
+		return
+	}
+	err = initDBFromDotEnv()
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -23,12 +28,17 @@ func main() {
 		fmt.Println(err)
 		return
 	}
+	err = initEncryptionKeysFromDotEnv()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	defer dbutils.CloseConnection()
 	http.Handle("/src_front/", http.StripPrefix("/src_front/", http.FileServer(http.Dir("src_front"))))
 	http.HandleFunc("/", handlers.IndexPage)
 	http.HandleFunc("/registration", handlers.RegistrationPage)
 	http.HandleFunc("/authorization", handlers.AuthorizationPage)
-	http.HandleFunc("/password_recovery", handlers.PasswordRecoveryPage)
+	http.HandleFunc("/password-recovery", handlers.PasswordRecoveryPage)
 	http.HandleFunc("/add-todo", handlers.AddTodo)
 	http.HandleFunc("/login", handlers.Login)
 	http.HandleFunc("/signup", handlers.SignUp)
@@ -41,17 +51,12 @@ func main() {
 }
 
 func initDBFromDotEnv() error {
-	err := godotenv.Load()
-	if err != nil {
-		return fmt.Errorf("error loading .env file: %w", err)
-	}
-
 	dbConnStr := os.Getenv("DB_CONN_STR")
 	if dbConnStr == "" {
 		return fmt.Errorf("DB_CONN_STR is not set in .env file")
 	}
 
-	err = dbutils.InitDB(dbConnStr)
+	err := dbutils.InitDB(dbConnStr)
 	if err != nil {
 		return fmt.Errorf("failed to initialize database: %w", err)
 	}
@@ -60,11 +65,6 @@ func initDBFromDotEnv() error {
 }
 
 func initMailUtilsFromDotEnv() error {
-	err := godotenv.Load()
-	if err != nil {
-		return fmt.Errorf("error loading .env file: %w", err)
-	}
-
 	host := os.Getenv("SMTP_HOST")
 	port := os.Getenv("SMTP_PORT")
 	user := os.Getenv("SMTP_USER")
@@ -74,5 +74,14 @@ func initMailUtilsFromDotEnv() error {
 	}
 
 	mailUtils.InitMailUtils(host, port, user, password)
+	return nil
+}
+func initEncryptionKeysFromDotEnv() error {
+	idEncryption := os.Getenv("ID_ENCRYPTION")
+	confirmationIdEncryption := os.Getenv("CONFIRMATION_ENCRYPTION")
+	if idEncryption == "" || confirmationIdEncryption == "" {
+		return fmt.Errorf("encryption keys are not fully set in .env file")
+	}
+	handlers.InitEncryptionKeys(idEncryption, confirmationIdEncryption)
 	return nil
 }
