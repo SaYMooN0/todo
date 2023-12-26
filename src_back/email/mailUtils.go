@@ -1,9 +1,7 @@
 package dbutils
 
 import (
-	"bytes"
 	"fmt"
-	"mime/multipart"
 	"net/smtp"
 )
 
@@ -21,18 +19,16 @@ func InitMailUtils(host, port, user, password string) {
 	smtpPassword = password
 }
 func createMessage(to, subject, body string) []byte {
-	var email bytes.Buffer
-	writer := multipart.NewWriter(&email)
-	writer.WriteField("From", "Todo app")
-	writer.WriteField("To", to)
-	writer.WriteField("Subject", subject)
-	writer.WriteField("Content-Type", "text/plain; charset=UTF-8")
-	writer.WriteField("Content-Transfer-Encoding", "quoted-printable")
-	writer.WriteField("MIME-Version", "1.0")
-	writer.WriteField("body", body)
-	writer.Close()
-	return email.Bytes()
+	headers := "From: Todo app\r\n"
+	headers += "To: " + to + "\r\n"
+	headers += "Subject: " + subject + "\r\n"
+	headers += "MIME-Version: 1.0\r\n"
+	headers += "Content-Type: text/html; charset=UTF-8\r\n"
+	headers += "\r\n" + body
+
+	return []byte(headers)
 }
+
 func SendEmail(to, subject, body string) error {
 	message := createMessage(to, subject, body)
 	auth := smtp.PlainAuth("", smtpUser, smtpPassword, smtpHost)

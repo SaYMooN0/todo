@@ -1,6 +1,20 @@
-<form class="registration-form" method="post" action="/confirmEmail" hx-post="/confirmEmail" hx-target="this"
+<form class="registration-form" method="post" action="/confirmEmail" hx-post="/confirmEmail" hx-target=".error-line"
     hx-swap="outerHTML">
-    <h1>Code:</h1>
-    <input type="text" name="Code" class="code-input" />
+    <h1>Registration Code:</h1>
+    <input type="text" id="codeInput" name="Code" class="code-input" required />
+    <button type="button" onclick="pasteCode()" class="paste-button">Paste Code</button>
     <p class="error-line">{{.}}</p>
+    <script>
+        function pasteCode() {
+            navigator.clipboard.readText()
+                .then(text => {
+                    document.getElementById('codeInput').value = text;
+                })
+                .catch(err => {
+                    console.error('Failed to read clipboard contents: ', err);
+                });
+        }
+
+    </script>
+    <input type="submit" class="signup-button"/>
 </form>

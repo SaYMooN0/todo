@@ -5,7 +5,7 @@ import (
 )
 
 func IndexPage(writer http.ResponseWriter, request *http.Request) {
-	if !CheckForAuthToken(writer, request) {
+	if !CheckForAuthToken(request) {
 		http.Redirect(writer, request, "/authorization", http.StatusFound)
 		return
 	}

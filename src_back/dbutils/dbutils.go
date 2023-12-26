@@ -106,3 +106,34 @@ func UpsertEmailConfirmation(code string, user structs.User) (int64, error) {
 		return newID, nil
 	}
 }
+func GetUserFromConfirmationTable(id int64) (structs.User, error) {
+	var u structs.User
+
+	query := `SELECT id, name, email, password FROM email_confirmation WHERE id = $1`
+	row := db.QueryRow(query, id)
+	err := row.Scan(&u.Id, &u.Name, &u.Email, &u.Password)
+	if err != nil {
+		return structs.User{}, err
+	}
+	u.RegistrationDate = time.Now()
+
+	return u, nil
+}
+func GetConfirmationCodeByID(id int64) (string, error) {
+	var confirmationCode string
+
+	query := `SELECT confirmation_code FROM email_confirmation WHERE id = $1`
+	row := db.QueryRow(query, id)
+	err := row.Scan(&confirmationCode)
+	if err != nil {
+		return "", err
+	}
+
+	return confirmationCode, nil
+}
+
+func DeleteUserFromConfirmationTable(id int64) error {
+	query := `DELETE FROM email_confirmation WHERE id = $1`
+	_, err := db.Exec(query, id)
+	return err
+}

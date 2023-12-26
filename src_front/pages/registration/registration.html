@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
     <link rel="stylesheet" href="/src_front/main.css">
+    <link rel="stylesheet" href="/src_front/pages/registration/registration.css">
     <script src="https://unpkg.com/htmx.org"></script>
 </head>
 
 <body>
-    <form class="registration-form" method="post" action="/signup" hx-post="/signup"  hx-target="this"
+    <form class="registration-form" method="post" action="/signup" hx-post="/signup" hx-target="this"
         hx-redirect="/index" hx-swap="outerHTML">
         <p class="input-line">Email:
             <input type="text" name="Email" class="input" />
@@ -25,10 +26,10 @@
             <input type="text" name="Name" class="input" />
         </p>
         <p class="error-line"></p>
-
-        <input type="submit" value="Sign up" />
+        <input type="submit" value="Sign up" class="signup-button" />
+        <a href="/authorization">Already have an account?</a>
     </form>
 </body>
-<a href="/authorization">Already have an account?</a>
+
 
 </html>

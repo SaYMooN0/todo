@@ -104,7 +104,7 @@ func SetAuthTokenCookie(writer http.ResponseWriter, authToken string) {
 	})
 }
 
-func CheckForAuthToken(writer http.ResponseWriter, request *http.Request) bool {
+func CheckForAuthToken(request *http.Request) bool {
 
 	idCookie, err := request.Cookie("userId")
 	if err != nil {
@@ -133,4 +133,18 @@ func CheckForAuthToken(writer http.ResponseWriter, request *http.Request) bool {
 	}
 
 	return authString == decryptedToken
+}
+func CheckForConfirmationId(request *http.Request) bool {
+	_, err := request.Cookie("confirmationId")
+	return err == nil
+}
+func DeleteConfirmationIDCookie(writer http.ResponseWriter) {
+	cookie := &http.Cookie{
+		Name:    "confirmationId",
+		Value:   "",
+		Path:    "/",
+		Expires: time.Unix(0, 0),
+		MaxAge:  -1,
+	}
+	http.SetCookie(writer, cookie)
 }

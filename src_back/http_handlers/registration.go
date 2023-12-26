@@ -12,11 +12,16 @@ import (
 )
 
 func RegistrationPage(writer http.ResponseWriter, request *http.Request) {
-	if CheckForAuthToken(writer, request) {
+	if CheckForAuthToken(request) {
 		http.Redirect(writer, request, "/index", http.StatusFound)
 		return
 	}
+
+	if CheckForConfirmationId(request) {
+		DeleteConfirmationIDCookie(writer)
+	}
 	http.ServeFile(writer, request, "src_front/pages/registration/registration.html")
+
 }
 func SignUp(writer http.ResponseWriter, request *http.Request) {
 	if request.Method != "POST" {
@@ -77,7 +82,12 @@ func ConfirmEmail(writer http.ResponseWriter, request *http.Request) {
 		http.Error(writer, "Form parsing error", http.StatusBadRequest)
 		return
 	}
-	code, err := GetConfirmationIdFromCookie(request)
+	confirmationId, err := GetConfirmationIdFromCookie(request)
+	if err != nil {
+		SendErrorInErrorLine(writer, "Server error")
+		return
+	}
+	code, err := dbutils.GetConfirmationCodeByID(confirmationId)
 	if err != nil {
 		SendErrorInErrorLine(writer, "Server error")
 		return
@@ -92,29 +102,33 @@ func ConfirmEmail(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	// registrationDate := time.Now()
-	// userId, err := dbutils.AddNewUserToDb(user)
-	// if err != nil {
-	// 	fmt.Print("New user adding error: ", err)
-	// 	formData.ErrorLine = "Server error"
-	// 	sendRegistrationFormBack(writer, formData)
-	// 	return
-	// }
-	// authToken, err := GenerateAuthToken(registrationDate, formData.Email, userId)
-	// if err != nil {
-	// 	formData.ErrorLine = "Server error"
-	// 	sendRegistrationFormBack(writer, formData)
-	// 	return
-	// }
-	// idToken, err := GenerateIDToken(userId)
-	// if err != nil {
-	// 	formData.ErrorLine = "Server error"
-	// 	sendRegistrationFormBack(writer, formData)
-	// 	return
-	// }
-
-	// SetIDTokenCookie(writer, idToken)
-	// SetAuthTokenCookie(writer, authToken)
+	user, err := dbutils.GetUserFromConfirmationTable(confirmationId)
+	if err != nil {
+		SendErrorInErrorLine(writer, "Server error. Please try again later")
+		return
+	}
+	userId, err := dbutils.AddNewUserToDb(user)
+	if err != nil {
+		fmt.Print("New user adding error: ", err)
+		SendErrorInErrorLine(writer, "Server error. Please try again later")
+		return
+	}
+	authToken, err := GenerateAuthToken(user.RegistrationDate, user.Email, userId)
+	if err != nil {
+		SendErrorInErrorLine(writer, "Server error. Please try again later")
+		return
+	}
+	idToken, err := GenerateIDToken(userId)
+	if err != nil {
+		SendErrorInErrorLine(writer, "Server error. Please try again later")
+		return
+	}
+	DeleteConfirmationIDCookie(writer)
+	SetIDTokenCookie(writer, idToken)
+	SetAuthTokenCookie(writer, authToken)
+	dbutils.DeleteUserFromConfirmationTable(user.Id)
+	writer.Header().Set("HX-Redirect", "/index")
+	writer.WriteHeader(http.StatusOK)
 }
 func validateSignUpForm(email, password, repeatedPassword, userName string) string {
 	if email == "" || password == "" || repeatedPassword == "" || userName == "" {
@@ -163,7 +177,7 @@ func goToEmailConfirmation(writer http.ResponseWriter) {
 }
 func generateConfirmationCode() string {
 	const digits = "0123456789"
-	const length = 8
+	const length = 12
 	code := make([]byte, length)
 
 	for i := range code {
