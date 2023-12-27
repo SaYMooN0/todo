@@ -21,7 +21,7 @@
                 <a href="/account" class="action"> Account </a>
             </div>
         </div>
-        <div class="main-part">
+        <div class="main-part" hx-get="/renderTasks" hx-target=".tasks-container" hx-trigger="load">
             <div class="tasks-top-line">
                 <div class="top-line-left">
                     <h1 class="your-tasks-header">
@@ -39,8 +39,9 @@
                     Add New Task
                 </button>
             </div>
-            <ul id="todo-list">
-            </ul>
+            <div class="tasks-container">
+
+            </div>
         </div>
     </div>
 </body>

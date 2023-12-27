@@ -1,12 +1,9 @@
 package handlers
 
 import (
-	"database/sql"
 	"html/template"
 	"net/http"
 )
-
-var db *sql.DB
 
 func SendErrorInErrorLine(writer http.ResponseWriter, errorText string) {
 	tasksTemplate, err := template.ParseFiles("templates/error-line.go.tmpl")

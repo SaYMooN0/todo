@@ -43,6 +43,7 @@ func main() {
 	http.HandleFunc("/login", handlers.Login)
 	http.HandleFunc("/signup", handlers.SignUp)
 	http.HandleFunc("/confirmEmail", handlers.ConfirmEmail)
+	http.HandleFunc("/renderTasks", handlers.RenderTasks)
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		fmt.Println("ListenAndServe: ", err)

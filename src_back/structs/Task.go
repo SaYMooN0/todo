@@ -6,10 +6,11 @@ type Task struct {
 	Id          int64
 	Name        string
 	Info        string
-	Complete    bool
+	IsCompleted bool
 	HasDeadline bool
 	Deadline    time.Time
 	Importance  uint
+	User        int64
 }
 
 func NewTask(id int64, name string, info string) Task {

@@ -3,28 +3,11 @@ package dbutils
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	structs "my-todo-app/src_back/structs"
 	"time"
 
 	_ "github.com/lib/pq"
 )
-
-var db *sql.DB = nil
-
-func InitDB(dataSourceName string) error {
-	var err error
-	db, err = sql.Open("postgres", dataSourceName)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-
-	return nil
-}
-func CloseConnection() {
-	db.Close()
-}
 
 func GetAuthTokenByID(id int) (string, error) {
 	var registrationDate time.Time
