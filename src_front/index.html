@@ -11,14 +11,38 @@
 
 <body>
     <script src="https://unpkg.com/htmx.org"></script>
-    <h1>Basic ToDo app</h1>
-    <form hx-post="/add-todo" hx-target="#todo-list" hx-swap="outerHTML">
-        <input type="text" name="name" placeholder="Task name" required>
-        <input type="text" name="info" placeholder="Task info">
-        <button type="submit">Add task</button>
-    </form>
-    <ul id="todo-list">
-    </ul>
+    <div class="body-container">
+        <div class="left-panel">
+            <h2 class="left-panel-header">To Do app</h2>
+            <div class="divider"> </div>
+            <div class="actions-container">
+                <a href="/index" class="action"> Tasks </a>
+                <a href="/statistics" class="action"> Statistic </a>
+                <a href="/account" class="action"> Account </a>
+            </div>
+        </div>
+        <div class="main-part">
+            <div class="tasks-top-line">
+                <div class="top-line-left">
+                    <h1 class="your-tasks-header">
+                        Your tasks:
+                    </h1>
+
+                    <select name="SortType" class="sort-type-select">
+                        <option value="date">Date</option>
+                        <option value="importance">Importance</option>
+                        <option value="name">Name</option>
+                        <option value="addingDate">AddingDate</option>
+                    </select>
+                </div>
+                <button class="new-task-button">
+                    Add New Task
+                </button>
+            </div>
+            <ul id="todo-list">
+            </ul>
+        </div>
+    </div>
 </body>
 
 </html>
