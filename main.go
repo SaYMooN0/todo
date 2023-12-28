@@ -39,11 +39,12 @@ func main() {
 	http.HandleFunc("/registration", handlers.RegistrationPage)
 	http.HandleFunc("/authorization", handlers.AuthorizationPage)
 	http.HandleFunc("/password-recovery", handlers.PasswordRecoveryPage)
-	http.HandleFunc("/add-todo", handlers.AddTodo)
 	http.HandleFunc("/login", handlers.Login)
 	http.HandleFunc("/signup", handlers.SignUp)
 	http.HandleFunc("/confirmEmail", handlers.ConfirmEmail)
 	http.HandleFunc("/renderTasks", handlers.RenderTasks)
+	http.HandleFunc("/newTaskCreated", handlers.NewTaskCreated)
+	http.HandleFunc("/newTaskForm", handlers.NewTaskForm)
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		fmt.Println("ListenAndServe: ", err)

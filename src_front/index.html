@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDo List</title>
-    <link rel="stylesheet" href="/src_front/index.css">
+    <link rel="stylesheet" href="/src_front/index_styles/index.css">
+    <link rel="stylesheet" href="/src_front/index_styles/new_task_form.css">
     <link rel="stylesheet" href="/src_front/main.css">
 </head>
 
@@ -35,7 +36,7 @@
                         <option value="addingDate">AddingDate</option>
                     </select>
                 </div>
-                <button class="new-task-button">
+                <button class="new-task-button" hx-get="/newTaskForm" hx-target=".tasks-container" hx-trigger="click">
                     Add New Task
                 </button>
             </div>

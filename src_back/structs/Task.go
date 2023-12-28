@@ -9,30 +9,33 @@ type Task struct {
 	IsCompleted bool
 	HasDeadline bool
 	Deadline    time.Time
-	Importance  uint
+	Importance  int8
 	User        int64
 }
 
-func NewTask(id int64, name string, info string) Task {
-	return Task{
-		Id:          id,
+func NewTaskWithoutDeadline(name, info string, importance int8, user int64) *Task {
+	return &Task{
 		Name:        name,
 		Info:        info,
+		IsCompleted: false,
 		HasDeadline: false,
-		Deadline:    time.Now(),
+		Importance:  importance,
+		User:        user,
+	}
+}
+func NewTaskWithDeadline(name, info string, deadline time.Time, importance int8, user int64) *Task {
+	return &Task{
+		Name:        name,
+		Info:        info,
+		IsCompleted: false,
+		HasDeadline: true,
+		Deadline:    deadline,
+		Importance:  importance,
+		User:        user,
 	}
 }
 
-func NewTaskWithDeadline(id int64, name string, info string, deadline time.Time) Task {
-	return Task{
-		Id:          id,
-		Name:        name,
-		Info:        info,
-		HasDeadline: true,
-		Deadline:    deadline,
-	}
-}
-func (t *Task) SetImportance(importance uint) {
+func (t *Task) SetImportance(importance int8) {
 	if importance < 1 {
 		t.Importance = 1
 	} else if importance > 10 {
