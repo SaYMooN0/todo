@@ -11,6 +11,7 @@ type Task struct {
 	Deadline    time.Time
 	Importance  int8
 	User        int64
+	CreatedAt   time.Time
 }
 
 func NewTaskWithoutDeadline(name, info string, importance int8, user int64) *Task {
@@ -21,8 +22,10 @@ func NewTaskWithoutDeadline(name, info string, importance int8, user int64) *Tas
 		HasDeadline: false,
 		Importance:  importance,
 		User:        user,
+		CreatedAt:   time.Now(),
 	}
 }
+
 func NewTaskWithDeadline(name, info string, deadline time.Time, importance int8, user int64) *Task {
 	return &Task{
 		Name:        name,
@@ -32,15 +35,6 @@ func NewTaskWithDeadline(name, info string, deadline time.Time, importance int8,
 		Deadline:    deadline,
 		Importance:  importance,
 		User:        user,
-	}
-}
-
-func (t *Task) SetImportance(importance int8) {
-	if importance < 1 {
-		t.Importance = 1
-	} else if importance > 10 {
-		t.Importance = 10
-	} else {
-		t.Importance = importance
+		CreatedAt:   time.Now(),
 	}
 }

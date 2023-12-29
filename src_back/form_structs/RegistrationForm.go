@@ -1,4 +1,4 @@
-package structs
+package forms
 
 type RegistrationForm struct {
 	Name             string

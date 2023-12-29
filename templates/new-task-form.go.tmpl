@@ -1,36 +1,34 @@
-<div class="tasks-container">
-    <form action="/newTaskCreated" method="post">
-        <label class="new-task-line">
-            Task Name:
-            <input type="text" name="Name" required>
-        </label><br>
+<form hx-post="/newTaskCreated" method="post" hx-target="this"  hx-redirect="/index">
+    <label class="new-task-line">
+        Task Name:
+        <input type="text" name="Name" value="{{.Name}}" required>
+    </label><br>
 
-        <label class="new-task-line">
-            Task Info:
-            <textarea name="Info"></textarea>
-        </label><br>
+    <label class="new-task-line">
+        Task Info:
+        <textarea name="Info">{{.Info}}</textarea>
+    </label><br>
 
-        <label class="new-task-line">
-            Importance (1-10):
-            <input type="number" name="Importance" min="1" max="10" required>
-        </label><br>
+    <label class="new-task-line">
+        Importance (1-10):
+        <input type="number" name="Importance" min="1" max="10" value="{{.Importance}}" required>
+    </label><br>
 
-        <label class="new-task-line">
-            Has Deadline?
-            <input type="checkbox" name="HasDeadline">
-        </label><br>
+    <label class="new-task-line">
+        Has Deadline?
+        <input type="checkbox" name="HasDeadline" {{if .HasDeadline}}checked{{end}}>
+    </label><br>
 
-        <label class="new-task-line">
-            Deadline:
-            <input type="date" name="Deadline">
-        </label><br>
-        <p class="error-line">{{.}}</p>
-        <div class="bottom-buttons-container">
-            <input type="submit" value="Save Task">
-            <button type="button" class="cancel-button" hx-trigger="click" hx-swap="outerHTML" hx-get="/renderTasks"
-                hx-target=".tasks-container">
-                Cancel
-            </button>
-        </div>
-    </form>
-</div>
+    <label class="new-task-line">
+        Deadline:
+        <input type="date" name="Deadline" value="{{.Deadline}}">
+    </label><br>
+    <p class="error-line">{{.ErrorLine}}</p>
+    <div class="bottom-buttons-container">
+        <input type="submit" value="Save Task">
+        <button type="button" class="cancel-button" hx-trigger="click" hx-swap="outerHTML" hx-get="/renderTasks"
+            hx-target=".tasks-container">
+            Cancel
+        </button>
+    </div>
+</form>

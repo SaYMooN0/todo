@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"my-todo-app/src_back/dbutils"
 	mailUtils "my-todo-app/src_back/email"
+	forms "my-todo-app/src_back/form_structs"
 	"my-todo-app/src_back/structs"
 	"net/http"
 	"regexp"
@@ -32,7 +33,7 @@ func SignUp(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	formData := structs.NewRegistrationForm(request.FormValue("Name"), request.FormValue("Email"), request.FormValue("Password"), request.FormValue("RepeatedPassword"))
+	formData := forms.NewRegistrationForm(request.FormValue("Name"), request.FormValue("Email"), request.FormValue("Password"), request.FormValue("RepeatedPassword"))
 	_, err := dbutils.GetIDByEmail(formData.Email)
 	if err == nil {
 		formData.ErrorLine = "The email has already been registered"
@@ -47,7 +48,7 @@ func SignUp(writer http.ResponseWriter, request *http.Request) {
 	emailConfirmation(writer, request, *formData)
 }
 
-func emailConfirmation(writer http.ResponseWriter, request *http.Request, formData structs.RegistrationForm) {
+func emailConfirmation(writer http.ResponseWriter, request *http.Request, formData forms.RegistrationForm) {
 
 	user := structs.User{Name: formData.Name, Email: formData.Email, Password: formData.Password}
 	confirmationCode := generateConfirmationCode()
@@ -155,7 +156,7 @@ func validateSignUpForm(email, password, repeatedPassword, userName string) stri
 	return ""
 }
 
-func sendRegistrationFormBack(writer http.ResponseWriter, formStruct structs.RegistrationForm) {
+func sendRegistrationFormBack(writer http.ResponseWriter, formStruct forms.RegistrationForm) {
 	tasksTemplate, err := template.ParseFiles("templates/registration-form.go.tmpl")
 	if err != nil {
 		http.Error(writer, "Internal Server Error", http.StatusInternalServerError)

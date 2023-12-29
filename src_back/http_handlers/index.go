@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"fmt"
 	"html/template"
 	"my-todo-app/src_back/dbutils"
+	forms "my-todo-app/src_back/form_structs"
 	"my-todo-app/src_back/structs"
 	"net/http"
 	"strconv"
@@ -36,14 +36,7 @@ func RenderTasks(writer http.ResponseWriter, request *http.Request) {
 	}
 }
 func NewTaskForm(writer http.ResponseWriter, request *http.Request) {
-	tasksTemplate, err := template.ParseFiles("templates/new-task-form.go.tmpl")
-	if err != nil {
-		http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-	if err := tasksTemplate.Execute(writer, ""); err != nil {
-		http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
-	}
+	sendNewTaskForm(writer, *forms.DefaultTaskForm())
 }
 func NewTaskCreated(writer http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodPost {
@@ -55,9 +48,15 @@ func NewTaskCreated(writer http.ResponseWriter, request *http.Request) {
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	taskForm := forms.NewTaskForm(request.FormValue("Name"),
+		request.FormValue("Info"),
+		request.FormValue("Importance"),
+		request.FormValue("HasDeadline"),
+		request.FormValue("Deadline"), "")
 	id, err := GetUserIdFromCookie(request)
 	if err != nil {
-		SendErrorInErrorLine(writer, "Please, log out and log in one more time")
+		taskForm.ErrorLine = "Please, log out and log in one more time"
+		sendNewTaskForm(writer, *taskForm)
 		return
 	}
 	task, errString := formNewTask(
@@ -67,10 +66,18 @@ func NewTaskCreated(writer http.ResponseWriter, request *http.Request) {
 		request.FormValue("HasDeadline"),
 		request.FormValue("Deadline"), id)
 	if errString != "" {
-		SendErrorInErrorLine(writer, errString)
+		taskForm.ErrorLine = errString
+		sendNewTaskForm(writer, *taskForm)
 		return
 	}
-	fmt.Println(task)
+	_, err = dbutils.AddTask(task)
+	if err != nil {
+		taskForm.ErrorLine = "Server error. Please try again later"
+		sendNewTaskForm(writer, *taskForm)
+		return
+	}
+	writer.Header().Set("HX-Redirect", "/index")
+	writer.WriteHeader(http.StatusOK)
 }
 func formNewTask(name, info, importanceStr, hasDeadline, deadlineStr string, userId int64) (*structs.Task, string) {
 	if strings.TrimSpace(name) == "" {
@@ -110,7 +117,6 @@ func formNewTask(name, info, importanceStr, hasDeadline, deadlineStr string, use
 
 	return task, ""
 }
-
 func getTasksList(writer http.ResponseWriter, tasks []structs.Task) {
 	tasksTemplate, err := template.ParseFiles("templates/tasks.go.tmpl")
 	if err != nil {
@@ -128,6 +134,16 @@ func getNoTasksDiv(writer http.ResponseWriter) {
 		return
 	}
 	if err := tasksTemplate.Execute(writer, ""); err != nil {
+		http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
+	}
+}
+func sendNewTaskForm(writer http.ResponseWriter, formStruct forms.TaskForm) {
+	tasksTemplate, err := template.ParseFiles("templates/new-task-form.go.tmpl")
+	if err != nil {
+		http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	if err := tasksTemplate.Execute(writer, formStruct); err != nil {
 		http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
 	}
 }

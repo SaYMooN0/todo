@@ -1,18 +1,13 @@
-{{range .}}
-<div>
-    <div class="importance-div importance-{{.Importance}}"></div>
-    <label class="task-name">{{.Name}}</label>
-    <label class="task-info"> {{.Info}}</label>
-    <label class="default-checkbox-label">
-        {{if .Complete}}
-        Completed
-        {{else}}
-        Not completed
+<div class="tasks-container">
+
+        {{range .}}
+        <div class="task-div">
+            <strong>{{.Name}}</strong><br>
+            Info: {{.Info}}<br>
+            Completed: {{.IsCompleted}}<br>
+            Deadline: {{if .HasDeadline}}{{.Deadline.Format "2006-01-02"}}{{else}}No Deadline{{end}}<br>
+            Importance: {{.Importance}}
+        </div>
         {{end}}
-        <input type="checkbox" {{if .Complete}} checked {{end}}>
-        <span class="checkmark"></span>
-    </label>
+
 </div>
-{{else}}
-<div>No tasks</div>
-{{end}}

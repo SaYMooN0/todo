@@ -27,9 +27,13 @@ func GetTasksForUserID(userID int64) ([]structs.Task, error) {
 	}
 	return tasks, nil
 }
-func AddTask(t structs.Task) (int64, error) {
+func AddTask(t *structs.Task) (int64, error) {
 	var taskID int64
-	err := db.QueryRow("INSERT INTO tasks(name, info, is_completed, has_deadline, deadline, importance, user_id) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id", t.Name, t.Info, t.IsCompleted, t.HasDeadline, t.Deadline, t.Importance, t.User).Scan(&taskID)
+	err := db.QueryRow(`
+		INSERT INTO tasks(name, info, is_completed, has_deadline, deadline, importance, user_id, created_at) 
+		VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
+		t.Name, t.Info, t.IsCompleted, t.HasDeadline, t.Deadline, t.Importance, t.User, t.CreatedAt,
+	).Scan(&taskID)
 	if err != nil {
 		return 0, err
 	}
