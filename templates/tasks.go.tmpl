@@ -1,13 +1,32 @@
 <div class="tasks-container">
+    {{range .}}
+    <div class="task-div">
+        <div class="task-importace importance-div-{{.Importance}}"></div>
+        <div class="task-right-part">
+            <div class="top-task-line">
+                <label class="task-name">
+                    {{.Name}}
+                </label>
+                <label class="task-deadline">
+                    {{if .HasDeadline}}deadline:{{.Deadline.Format "2006-01-02"}}
+                    {{else}}No Deadline
+                    {{end}}
+                </label>
+            </div>
+            <p class="task-info">{{.Info}}</p>
+            {{if .IsCompleted}}
+            <label class="task-completed">
+                Completed
+            </label>
+            {{else}}
+            <button class="complete-button" hx-trigger="click" hx-swap="outerHTML" hx-post="/completeTask"
+                hx-target=".task-div" hx-vals='{"id": "{{.Id}}"}'
+                hx-headers='{"Content-Type": "application/json"}'>Complete</button>
 
-        {{range .}}
-        <div class="task-div">
-            <strong>{{.Name}}</strong><br>
-            Info: {{.Info}}<br>
-            Completed: {{.IsCompleted}}<br>
-            Deadline: {{if .HasDeadline}}{{.Deadline.Format "2006-01-02"}}{{else}}No Deadline{{end}}<br>
-            Importance: {{.Importance}}
+
+            {{end}}
         </div>
-        {{end}}
 
+    </div>
+    {{end}}
 </div>

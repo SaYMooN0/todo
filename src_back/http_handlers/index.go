@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"html/template"
 	"my-todo-app/src_back/dbutils"
 	forms "my-todo-app/src_back/form_structs"
@@ -17,6 +18,22 @@ func IndexPage(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 	http.ServeFile(writer, request, "src_front/index.html")
+}
+func CompleteTask(writer http.ResponseWriter, request *http.Request) {
+	if request.Method != "POST" {
+		http.Error(writer, "Only POST method is allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	if err := request.ParseForm(); err != nil {
+		http.Error(writer, err.Error(), http.StatusBadRequest)
+		return
+	}
+	taskID := request.FormValue("id")
+	if taskID == "" {
+		http.Error(writer, "ID not provided", http.StatusBadRequest)
+		return
+	}
+	fmt.Fprintf(writer, "Task %s completed", taskID)
 }
 
 func RenderTasks(writer http.ResponseWriter, request *http.Request) {

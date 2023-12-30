@@ -1,38 +1,98 @@
+.task-div {
+    margin-top: 6px;
+    height: auto;
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 6px rgba(30, 10, 150, 0.12);
+    border-radius: 10px;
+
+}
+
+.task-importace {
+    justify-self: center;
+    width: 90%;
+    border-radius: 10px;
+}
+.task-right-part {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+}
+.top-task-line {
+    display: flex;
+    justify-content: space-between;
+}
+
+.task-name {
+    font-weight: bold;
+    font-size: 28px;
+    color: var(--front);
+}
+
+.task-deadline {
+    font-size: 20px;
+    color: var(--bright-2);
+}
+
+.task-info {
+    margin: 5px 0;
+    color: var(--front);
+    font-size: 18px;
+}
+.complete-button {
+    padding: 10px 15px;
+    border: none;
+    background-color: var(--bright-1);
+    color: var(--back);
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-left: auto;
+
+}
+
+.complete-button:hover {
+    background-color: var(--bright-3);
+}
+
 .importance-div-1 {
-    background-color: #95d5b2; 
+    background-color: #95d5b2;
 }
 
 .importance-div-2 {
-    background-color:  #74c69d; 
+    background-color: #74c69d;
 }
 
 .importance-div-3 {
-    background-color:  #52b788; 
+    background-color: #52b788;
 }
 
 .importance-div-4 {
-    background-color: #40916c; 
+    background-color: #40916c;
 }
 
 .importance-div-5 {
-    background-color: #a3bf6f; 
+    background-color: #a3bf6f;
 }
 
-
 .importance-div-6 {
-    background-color: #f9c74f; 
+    background-color: #f9c74f;
 }
 
 .importance-div-7 {
-    background-color: #f9844a; 
+    background-color: #f9844a;
 }
 
 .importance-div-8 {
-    background-color: #f3722c; 
+    background-color: #f3722c;
 }
 
 .importance-div-9 {
-    background-color: #f94144; 
+    background-color: #f94144;
 }
 
 .importance-div-10 {
