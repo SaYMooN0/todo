@@ -4,19 +4,26 @@ This project is a ToDo application built using HTMX, Go, and PostgreSQL. I tried
 Setting Up the Project
 
 Download the project. Create a .env file in the main directory and set the following fields:
+
+
 DB_CONN_STR=
+
 SMTP_HOST=
+
 SMTP_PORT=
+
 SMTP_USER=
+
 SMTP_PASSWORD=
+
 ID_ENCRYPTION=
+
 CONFIRMATION_ENCRYPTION=
 
 
 Database Setup: Ensure your PostgreSQL database includes the following tables: users, tasks, and email_confirmation. Use the SQL queries provided below to create these tables.
 
 
-SQL Queries for Table Creation
 CREATE TABLE users (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(32),
