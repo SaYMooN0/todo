@@ -1,0 +1,20 @@
+<div class="task-div task-shadow-completed">
+    <div class="task-importace importance-div-{{.Importance}}"></div>
+    <div class="task-right-part">
+        <div class="top-task-line">
+            <label class="task-name">
+                {{.Name}}
+            </label>
+            <label class="task-deadline">
+                {{if .HasDeadline}}deadline:{{.Deadline.Format "02-01-2006"}}
+                {{else}}No Deadline
+                {{end}}
+            </label>
+        </div>
+        <p class="task-info">{{.Info}}</p>
+        <label class="task-completed-label">
+            Completed
+        </label>
+    </div>
+
+</div>

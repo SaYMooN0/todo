@@ -38,3 +38,12 @@ func NewTaskWithDeadline(name, info string, deadline time.Time, importance int8,
 		CreatedAt:   time.Now(),
 	}
 }
+func (t *Task) DivShadow() string {
+	if t.IsCompleted {
+		return "completed"
+	}
+	if t.HasDeadline && time.Now().After(t.Deadline) {
+		return "red"
+	}
+	return "default"
+}

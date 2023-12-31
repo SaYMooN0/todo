@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"html/template"
 	"my-todo-app/src_back/dbutils"
 	forms "my-todo-app/src_back/form_structs"
@@ -28,12 +27,27 @@ func CompleteTask(writer http.ResponseWriter, request *http.Request) {
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 		return
 	}
-	taskID := request.FormValue("id")
-	if taskID == "" {
+	taskIDStr := request.FormValue("id")
+	if taskIDStr == "" {
 		http.Error(writer, "ID not provided", http.StatusBadRequest)
 		return
 	}
-	fmt.Fprintf(writer, "Task %s completed", taskID)
+	taskID, err := strconv.ParseInt(taskIDStr, 10, 64)
+	if err != nil {
+		http.Error(writer, "Invalid ID format", http.StatusBadRequest)
+		return
+	}
+	task, err := dbutils.GetTaskByID(taskID)
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = dbutils.CompleteTask(taskID)
+	if err != nil {
+		renderCompletionError(writer, *task)
+		return
+	}
+	renderCompletedTask(writer, *task)
 }
 
 func RenderTasks(writer http.ResponseWriter, request *http.Request) {
@@ -161,6 +175,26 @@ func sendNewTaskForm(writer http.ResponseWriter, formStruct forms.TaskForm) {
 		return
 	}
 	if err := tasksTemplate.Execute(writer, formStruct); err != nil {
+		http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
+	}
+}
+func renderCompletedTask(writer http.ResponseWriter, task structs.Task) {
+	tasksTemplate, err := template.ParseFiles("templates/completed-task.go.tmpl")
+	if err != nil {
+		http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	if err := tasksTemplate.Execute(writer, task); err != nil {
+		http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
+	}
+}
+func renderCompletionError(writer http.ResponseWriter, task structs.Task) {
+	tasksTemplate, err := template.ParseFiles("templates/task-with-error.go.go.tmpl")
+	if err != nil {
+		http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	if err := tasksTemplate.Execute(writer, task); err != nil {
 		http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
 	}
 }

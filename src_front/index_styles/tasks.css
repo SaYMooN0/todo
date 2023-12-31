@@ -5,11 +5,18 @@
     grid-template-columns: 20px 1fr;
     gap: 10px;
     padding: 10px;
-    box-shadow: 0 2px 6px rgba(30, 10, 150, 0.12);
     border-radius: 10px;
 
 }
-
+.task-shadow-default{
+    box-shadow: 0 4px 6px rgba(50, 30, 160, 0.2);
+}
+.task-shadow-completed{
+    box-shadow: -2px 4px 6px rgba(30, 180, 40, 0.3);
+}
+.task-shadow-red{
+    box-shadow: -2px 4px 6px rgba(230, 30, 60, 0.4);
+}
 .task-importace {
     justify-self: center;
     width: 90%;
@@ -58,7 +65,17 @@
 .complete-button:hover {
     background-color: var(--bright-3);
 }
-
+.task-completed-label{
+    color: var(--bright-2);
+    font-size: 20px;
+    font-weight: bold;
+}
+.completion-error{
+    margin-left: auto;
+    color: var(--warning);
+    font-size: 14px;
+    font-weight: bold;
+}
 .importance-div-1 {
     background-color: #95d5b2;
 }

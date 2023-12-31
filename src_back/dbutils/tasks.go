@@ -1,6 +1,8 @@
 package dbutils
 
 import (
+	"database/sql"
+	"fmt"
 	structs "my-todo-app/src_back/structs"
 
 	_ "github.com/lib/pq"
@@ -38,4 +40,24 @@ func AddTask(t *structs.Task) (int64, error) {
 		return 0, err
 	}
 	return taskID, nil
+}
+func CompleteTask(taskID int64) error {
+	_, err := db.Exec("UPDATE tasks SET is_completed = true WHERE id = $1", taskID)
+	if err != nil {
+		return fmt.Errorf("CompleteTask: %v", err)
+	}
+	return nil
+}
+func GetTaskByID(taskID int64) (*structs.Task, error) {
+	var t structs.Task
+	query := `SELECT id, name, info, is_completed, has_deadline, deadline, importance, user_id, created_at FROM tasks WHERE id = $1`
+	row := db.QueryRow(query, taskID)
+	err := row.Scan(&t.Id, &t.Name, &t.Info, &t.IsCompleted, &t.HasDeadline, &t.Deadline, &t.Importance, &t.User, &t.CreatedAt)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("no task with ID %d", taskID)
+		}
+		return nil, err
+	}
+	return &t, nil
 }

@@ -1,6 +1,6 @@
 <div class="tasks-container">
     {{range .}}
-    <div class="task-div">
+    <div class="task-div task-shadow-{{.DivShadow}}">
         <div class="task-importace importance-div-{{.Importance}}"></div>
         <div class="task-right-part">
             <div class="top-task-line">
@@ -8,22 +8,20 @@
                     {{.Name}}
                 </label>
                 <label class="task-deadline">
-                    {{if .HasDeadline}}deadline:{{.Deadline.Format "2006-01-02"}}
+                    {{if .HasDeadline}}deadline:{{.Deadline.Format "02-01-2006"}}
                     {{else}}No Deadline
                     {{end}}
                 </label>
             </div>
             <p class="task-info">{{.Info}}</p>
             {{if .IsCompleted}}
-            <label class="task-completed">
+            <label class="task-completed-label">
                 Completed
             </label>
             {{else}}
             <button class="complete-button" hx-trigger="click" hx-swap="outerHTML" hx-post="/completeTask"
-                hx-target=".task-div" hx-vals='{"id": "{{.Id}}"}'
+                hx-target="closest .task-div" hx-vals='{"id": "{{.Id}}"}'
                 hx-headers='{"Content-Type": "application/json"}'>Complete</button>
-
-
             {{end}}
         </div>
 

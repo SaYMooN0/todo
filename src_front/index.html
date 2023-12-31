@@ -23,7 +23,7 @@
                 <a href="/account" class="action"> Account </a>
             </div>
         </div>
-        <div class="main-part" hx-get="/renderTasks" hx-target=".tasks-container" hx-trigger="load">
+        <div class="main-part" hx-get="/renderTasks" hx-target=".tasks-container" hx-trigger="load" hx-swap="outerHTML">
             <div class="tasks-top-line">
                 <div class="top-line-left">
                     <h1 class="your-tasks-header">
